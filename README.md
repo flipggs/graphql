@@ -1,1 +1,0 @@
-# Aulas de GraphQL do curso da Udemy
