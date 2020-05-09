@@ -64,11 +64,11 @@ export default (sequelize: Sequelize, DataTypes: DataTypes): UserModel => {
     {
       tableName: "users",
       hooks: {
-        beforeCreate: (user: UserInstance, options: CreateOptions): void => {
+        beforeCreate: (user: UserInstance, options: CreateOptions) => {
           const salt = genSaltSync();
           user.password = hashSync(user.password, salt);
         },
-        beforeUpdate: (user: UserInstance, options: CreateOptions): void => {
+        beforeUpdate: (user: UserInstance, options: CreateOptions) => {
           if (user.changed("password")) {
             const salt = genSaltSync();
             user.password = hashSync(user.password, salt);

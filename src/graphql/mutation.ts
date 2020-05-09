@@ -6,7 +6,7 @@ const Mutation = `
   type Mutation {
     ${commentMutations}
     ${postMutations}
-    ${postMutations}
+    ${userMutations}
    }
 `;
 

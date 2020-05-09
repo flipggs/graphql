@@ -1,7 +1,8 @@
 import { DbConnection } from "../../../interfaces/DbConnectionInterface";
 import { GraphQLResolveInfo } from "graphql";
 import { Transaction } from "sequelize";
-import { CommentInstance } from "../../../models/CommentMode";
+import { CommentInstance } from "../../../models/CommentModel";
+import { handleError } from "../../../utils/utils";
 
 export const commentResolvers = {
   Comment: {
@@ -11,7 +12,7 @@ export const commentResolvers = {
       { db }: { db: DbConnection },
       info: GraphQLResolveInfo
     ) => {
-      return db.User.findById(comment.get("user"));
+      return db.User.findById(comment.get("user")).catch(handleError);
     },
 
     post: (
@@ -20,7 +21,7 @@ export const commentResolvers = {
       { db }: { db: DbConnection },
       info: GraphQLResolveInfo
     ) => {
-      return db.Post.findById(comment.get("post"));
+      return db.Post.findById(comment.get("post")).catch(handleError);
     },
   },
 
@@ -31,13 +32,14 @@ export const commentResolvers = {
       { db }: { db: DbConnection },
       info: GraphQLResolveInfo
     ) => {
+      postId = parseInt(postId);
       return db.Comment.findAll({
         where: {
           post: postId,
         },
         limit: first,
         offset: offset,
-      });
+      }).catch(handleError);
     },
   },
 
@@ -50,7 +52,7 @@ export const commentResolvers = {
     ) => {
       return db.sequelize.transaction((t: Transaction) => {
         return db.Comment.create(input, { transaction: t });
-      });
+      }).catch(handleError);
     },
 
     updateComment: (
@@ -67,7 +69,7 @@ export const commentResolvers = {
 
           return comment.update(input, { transaction: t });
         });
-      });
+      }).catch(handleError);
     },
 
     deleteComment: (
@@ -84,7 +86,7 @@ export const commentResolvers = {
 
           return comment.destroy({ transaction: t }).then((c: any) => !!c);
         });
-      });
+      }).catch(handleError);
     },
   },
 };
