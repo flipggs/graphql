@@ -29,3 +29,5 @@ class App {
 }
 
 export default new App().express;
+
+console.log('foi')
